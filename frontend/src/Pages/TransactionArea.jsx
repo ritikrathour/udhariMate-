@@ -176,8 +176,8 @@ const TransactionArea = () => {
                             <LazyImage src={ borrower?.borrower?.profilePhoto ||  "../images/user.png"} alt="borrowerAvtar" />
                         </div>
                         <div className="flex flex-col">
-                            <h3 className="capitalize font-semibold text-[14px]">{borrower?.borrower?.userName}</h3>
-                            <Link to={`${user && user?.role === "shopkeeper" ? `/borrower-profile/${id}` : `/profile/${user?._id}`}`} className="text-[12px] cursor-pointer hover:text-blue-800 font-semibold text-blue-700 transition-all">View Profile <i className="fas fa-caret-right" /></Link>
+                            <h3 className="capitalize font-normal text-[14px]">{borrower?.borrower?.userName}</h3>
+                            <Link to={`${user && user?.role === "shopkeeper" ? `/borrower-profile/${id}` : `/profile/${user?._id}`}`} className="text-[12px] cursor-pointer hover:text-blue-800 font-light text-blue-700 transition-all">View Profile <i className="fas fa-caret-right" /></Link>
                         </div>
                     </div>
                     <div className="flex flex-col items-center">

@@ -16,7 +16,7 @@ const Borrower = ({ borrower }) => {
                             <LazyImage src={ profilePhoto || "../images/user.png"} alt="borrowerImage" />
                         </div>
                         <div className="">
-                            <h3 className="capitalize font-semibold text-[14px]">{userName}</h3>
+                            <h3 className="capitalize font-normal text-[14px]">{userName}</h3>
                             <p className="text-[12px]">Added on {createdAt.split("T")?.[0]}</p>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
- 
+
 import { memo, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast"
@@ -8,32 +8,41 @@ const Bill = ({ isPayment, setShowBill, id }) => {
     const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
     const [description, setdescription] = useState("");
     const { user } = useSelector(state => state.user);
-
+    const [loading, setLoading] = useState(false);
     const createDebt = async () => {
+        if (description.length === 0 || description === "") {
+            return toast.error("Description is Required!")
+        }
+        setLoading(true)
         try {
             const payload = { amount, description, borrower: id, date }
             const { data } = await AxiosInstance.post("/create-debt", payload,)
             setAmount("")
             setDate("")
             setdescription("")
+            setLoading(false);
             toast.success(data?.message)
             setShowBill(false);
         } catch (error) {
             console.log(error);
+            setLoading(false)
             toast.error(error?.response?.data?.message)
         }
     }
     const payPayment = async () => {
+        setLoading(true)
         try {
             const payload = { amount, borrower: id, description, date };
             const { data } = await AxiosInstance.post(`/create-payment`, payload)
             setAmount("")
             setDate("")
-            setdescription("")
+            setdescription("");
+            setLoading(false);
             toast.success(data?.message)
             setShowBill(false);
         } catch (error) {
             console.log(error);
+            setLoading(false);
             toast.error(error?.response?.data?.message)
         }
     }
@@ -66,8 +75,11 @@ const Bill = ({ isPayment, setShowBill, id }) => {
                 <div className="border border-green-600 h-[40px] w-[240px] sm:w-[300px] md:w-[350px] rounded-md ">
                     <input required value={description} onChange={(e) => setdescription(e.target.value)} className="h-full px-4 text-sm rounded-lg focus:bg-green-50 w-full capitalize" type="text" placeholder={!isPayment ? "Items Description!" : "Message..."} />
                 </div>
-                <button disabled={(amount.trim().length > 0 & amount > 0) ? false : true} onClick={() => handleSubmitData()} type="button" className={`${amount.trim().length > 0 ? "" : "bg-green-300"} w-[40px] h-[40px] rounded-full bg-green-600 border border-green-500`}>
-                    <i className="fas fa-check text-lg text-white"></i>
+                <button disabled={(amount.trim().length > 0 & amount > 0) ? loading ? true : false : true} onClick={() => handleSubmitData()} type="button" className={`${amount.trim().length > 0 ? "bg-green-600 cursor-pointer" : "bg-[#59bb7d] cursor-not-allowed"} w-[40px]  h-[40px] rounded-full border border-green-500 `}>
+                    {
+                        loading ? <i className="fas fa-spinner fa-spin text-white"></i> : <i className="fas fa-check text-lg text-white"></i>
+                    }
+
                 </button>
             </div>
         </div>
