@@ -163,7 +163,7 @@ const Ladger = () => {
             <section className="flex flex-col md:flex-row w-full sm:w-[90%] md:w-[80%] m-auto mb-4 gap-4 relative rounded-md">
                 <div className=" w-full py-2 px-2 "> 
                     <div className="flex justify-between mb-4 relative z-40">
-                        <h3 className="text-[16px] font-semibold border-b-2 border-black uppercase text-black" >Customers</h3>
+                        <h3 className="text-[16px] font-normal border-b-2 border-black uppercase text-black" >Customers</h3>
                         <button ref={filterPopupRef} onClick={handleShow} type="button" className=" border text-[16px] border-gray-300 px-4 rounded-full font-medium bg-[#69d2ff3d]">
                             Filter <i className="fas fa-filter text-black"></i>
                         </button>

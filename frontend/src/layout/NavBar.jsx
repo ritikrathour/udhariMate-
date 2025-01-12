@@ -165,7 +165,7 @@ const NavBar = () => {
                         loading ? <Loader style="border border-black" /> : (user && user?._id) ? (
                             <div className="relative flex justify-center items-center gap-2" >
                                 {
-                                    user && user?.role === "shopkeeper" ? (<Link className="mx-2 text-[14px] font-semibold hidden sm:block " to="/ladger">Ladgers</Link>) : null
+                                    user && user?.role === "shopkeeper" ? (<Link className="mx-2 text-[14px] font-normal hidden sm:block " to="/ladger">Ladgers</Link>) : null
                                 }
                                 {
                                     user?.role === "customer" &&

@@ -41,7 +41,7 @@ const SignIn = () => {
     return <>
         <section className="flex justify-center items-center h-[80vh]">
             <form onSubmit={(e) => handleSubmit(e)} className="w-[400px] rounded-tl-2xl rounded-br-2xl shadow-md shadow-slate-300 drop-shadow-md text-center p-3  flex flex-col gap-2">
-                <h2 className="text-[25px] font-[600]">Welcome Back</h2>
+                <h2 className="text-[25px] font-medium">Welcome Back</h2>
                 <Input type="email" placeholder="Email@gmail.com" icon="fas fa-user" value={formData?.email} name="email" id="email" func={handleChange} />
                 <div className="relative">
                     <Input type={showPassword ? "text" : "password"} placeholder="Enter Password" value={formData?.password} name="password" id="password" icon="fas fa-key" func={handleChange} />

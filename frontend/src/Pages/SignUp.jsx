@@ -51,7 +51,7 @@ const SignUp = () => {
         <>
             <section className="flex justify-center items-center h-[80vh]">
                 <form onSubmit={(e) => handleSubmit(e)} className="w-[400px] rounded-tl-2xl rounded-br-2xl shadow-md shadow-slate-300 drop-shadow-md text-center p-3 flex flex-col gap-2">
-                    <h2 className="text-[25px] font-[600]">Join Us Today</h2>
+                    <h2 className="text-[25px] font-medium">Join Us Today</h2>
                     <Input type="text" placeholder="UserName" style="capitalize" value={formData?.userName} name="userName" icon="fas fa-user" id="userName" func={handleChange} />
                     <Input type="email" placeholder="UserName@gmail.com" value={formData?.email} name="email" id="email" icon="fas fa-envelope" func={handleChange} />
                     <div className="relative">
@@ -64,29 +64,32 @@ const SignUp = () => {
                         <label htmlFor="role" className="text-sm font-medium">
                             User Type
                         </label>
-                        <select name="role" className="h-full rounded-md text-sm font-semibold p-1" id="role" onChange={(e) => setSelect(e.target.value)} value={select}>
-                            <option value="customer" className="text-sm font-semibold">Customer</option>
-                            <option value="shopkeeper" className="text-sm font-semibold">ShopKeeper</option>
+                        <select name="role" className="h-full rounded-md text-sm font-normal p-1" id="role" onChange={(e) => setSelect(e.target.value)} value={select}>
+                            <option value="customer" className="text-sm font-normal">Customer</option>
+                            <option value="shopkeeper" className="text-sm font-normal">ShopKeeper</option>
                         </select>
                     </div>
-                    <div className="h-[40px] rounded-lg bg-zinc-100 flex justify-between mb-2 py-1 items-center px-2 gap-4">
-                        {
-                            select === "customer" ? (
-                                <>
-                                    <label htmlFor="shopId" className="text-sm font-medium text-nowrap">
-                                        ShopID
-                                    </label>
-                                    <div className="sm:w-[270px] w-full">
-                                        <Input type="text" placeholder="Take Shop ID from Shopkeeper!" value={formData?.shopId} name="shopId" id="shopId" func={handleChange} />
-                                    </div>
-                                </>) : (
-                                <>
-                                    <label htmlFor="shopName" className="text-sm font-medium text-nowrap">
-                                        Shop Name
-                                    </label>
-                                    <Input style="capitalize" type="text" placeholder="Shop Name" value={formData?.shopName} name="shopName" id="shopName" func={handleChange} />
-                                </>)
-                        }
+                    <div>
+                        <div className="h-[40px] rounded-lg bg-zinc-100 flex justify-between mb-2 py-1 items-center px-2 gap-4 border ">
+                            {
+                                select === "customer" ? (
+                                    <>
+                                        <label htmlFor="shopId" className="text-sm font-medium text-nowrap">
+                                            ShopID
+                                        </label>
+                                        <div className="sm:w-[270px] w-full">
+                                            <Input type="text" placeholder="Shop ID" value={formData?.shopId} name="shopId" id="shopId" func={handleChange} />
+                                        </div>
+                                    </>) : (
+                                    <>
+                                        <label htmlFor="shopName" className="text-sm font-medium text-nowrap">
+                                            Shop Name
+                                        </label>
+                                        <Input style="capitalize" type="text" placeholder="Shop Name" value={formData?.shopName} name="shopName" id="shopName" func={handleChange} />
+                                    </>)
+                            }
+                        </div>
+                       { select === "customer" && <p className="text-[12px]">Please take shop ID from your Shopkeeper!</p>}
                     </div>
                     <button disabled={loading} type="submit"
                         className={`${loading ? "bg[#469bbfc2] cursor-not-allowed" : ""} flex justify-center bg-[#469bbf] py-[6px] rounded-full w-[300px] m-auto text-white`} >
