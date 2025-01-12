@@ -15,8 +15,7 @@ const reFreshAccessToken = async () => {
 }
 export const GetUser = createAsyncThunk("auth/getUser", async (_, { rejectWithValue }) => {
     try {
-        const response = await AxiosInstance.get("/user");
-        console.log(response);
+        const response = await AxiosInstance.get("/user"); 
         return response?.data?.data;
     } catch (error) {
         console.log(error?.response?.data?.message);
