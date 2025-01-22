@@ -1,4 +1,4 @@
-import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import NavBar from "./layout/NavBar";
 import { useDispatch } from "react-redux";
 import { lazy, Suspense, useEffect } from "react";
@@ -8,8 +8,7 @@ import Loader from "./components/Loader";
 import BorrowerProfile from "./Pages/BorrowerProfile";
 import BreadCrumbs from "./components/Breadcrumbs"
 import ScrollToTop from "./components/ScrollTop";
-import PageNotFound from "./Pages/PageNotFound";
-import axios from "axios";
+import PageNotFound from "./Pages/PageNotFound"; 
 const Profile = lazy(() => import("./Pages/Profile"));
 const ForgetPassword = lazy(() => import("./Pages/ForgetPassword"));
 const TransactionArea = lazy(() => import("./Pages/TransactionArea"));

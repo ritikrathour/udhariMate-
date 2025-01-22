@@ -20,7 +20,12 @@ const SignOutPopUp = () => {
             navigate("/")
         } catch (error) {
             console.log(error);
-            toast.error(error?.response?.data?.message)
+            toast.error(error?.response?.data?.message,{
+                iconTheme:{
+                       primary:"#f44336",
+                       secondary:"#fff" 
+                }
+           })
             setLoading(false)
         }
     }

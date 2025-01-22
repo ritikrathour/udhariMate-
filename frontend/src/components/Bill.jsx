@@ -11,7 +11,12 @@ const Bill = ({ isPayment, setShowBill, id }) => {
     const [loading, setLoading] = useState(false);
     const createDebt = async () => {
         if (description.length === 0 || description === "") {
-            return toast.error("Description is Required!")
+            return toast.error("Description is Required!",{
+                 iconTheme:{
+                        primary:"#f44336",
+                        secondary:"#fff" 
+                 }
+            })
         }
         setLoading(true)
         try {

@@ -1,5 +1,4 @@
- 
-import React, { useState } from "react";
+ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Input";
@@ -34,7 +33,12 @@ const SignIn = () => {
             }, 1000)
         } catch (error) {
             console.log(error);
-            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.message,{
+                iconTheme:{
+                       primary:"#f44336",
+                       secondary:"#fff" 
+                }
+           })
             setLoading(false);
         }
     }

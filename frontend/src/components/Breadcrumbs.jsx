@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-
 const BreadCrumbs = ()=>{
     const navigate = useNavigate();
     // handleBack

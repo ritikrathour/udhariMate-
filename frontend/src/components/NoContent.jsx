@@ -1,5 +1,4 @@
 import LazyImage from "../utils/LazyImage";
-
 const NoContent = ({img,alt,text}) => {
     return (
         <>

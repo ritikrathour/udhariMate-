@@ -4,22 +4,25 @@ import './index.css'
 import { Provider } from 'react-redux';
 import { Store } from './ReduxStore/Store.jsx';
 import { BrowserRouter } from 'react-router-dom';
-import { Toaster } from "react-hot-toast" 
-// import { ErrorBoundary } from './utils/ErrorBoundry';
+import { Toaster } from "react-hot-toast"
+import React from 'react';
 ReactDOM.createRoot(document.getElementById('root')).render(
-  //   <React.StrictMode>
-  // <ErrorBoundary> 
-  <BrowserRouter>
-    <Provider store={Store}> 
+  <React.StrictMode>
+    <BrowserRouter>
+      <Provider store={Store}>
         <Toaster toastOptions={{
           style: {
-            background: "rgb(51,65,85)",
-            color: "#fff"
+            paddingTop: "4px",
+            paddingBottom: "4px",
+            background: "rgb(0,0,0)",
+            color: "#fff",
+            fontSize: '15px',
+            border: "1px solid #333",
+            textAlign: "center"
           }
         }} />
-        <App /> 
-    </Provider>
-  </BrowserRouter>
-  // </ErrorBoundary>
-  /* </React.StrictMode> */
+        <App />
+      </Provider>
+    </BrowserRouter>
+  </React.StrictMode>
 )

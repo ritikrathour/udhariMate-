@@ -1,4 +1,3 @@
-
 import React, { useCallback, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,7 +30,12 @@ const SignUp = () => {
     const authentication = useCallback(async (formData) => {
         try {
             if (formRef.current.password?.value && formRef.current.password?.value.length < 6) {
-                toast.error("Password Length Should Be More than 6");
+                toast.error("Password Length Should Be More than 6",{
+                    iconTheme:{
+                           primary:"#f44336",
+                           secondary:"#000" 
+                    }
+               });
                 return
             }
             setLoading(true)
@@ -44,7 +48,12 @@ const SignUp = () => {
         } catch (error) {
             setLoading(false)
             console.log(error);
-            toast.error(error?.response?.data?.message);
+            toast.error(error?.response?.data?.message,{
+                iconTheme:{
+                       primary:"#f44336",
+                       secondary:"#fff" 
+                }
+           });
         }
     }, [])
     return (
