@@ -14,6 +14,7 @@ const accessTokenOptions = {
     secure:true,
     expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)
 }
+
 const refreshTokenOptions = {
     ...accessTokenOptions,
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -211,15 +212,15 @@ const RefreshAccessToken = AsyncHandler(async (req, res) => {
         throw new ApiError(401, "Invalid refreshToken");
     }
     const accessToken = jwt.sign({ role: user.role, _id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "1d"
+        expiresIn: "5d"
     });
     const refreshToken = jwt.sign({ role: user.role, _id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "3d"
+        expiresIn: "7d"
     });
     if (!accessToken) {
         throw new ApiError(401, "Something is wrong for generating jwtToken!")
     }
-    return res.status(200).cookie("accessToken", accessToken, accessTokenOptions).cookie("refreshToken", refreshToken, refreshTokenOptions).json(new ApiResponse(200, { accessToken, refreshToken }, "accessToken refreshed"));
+    res.status(200).cookie("accessToken", accessToken, accessTokenOptions).cookie("refreshToken", refreshToken, refreshTokenOptions).json(new ApiResponse(200, { accessToken, refreshToken }, "accessToken refreshed"));
 })
 
 module.exports = { SignUp, SignIn, SignOut, GetCurrUser, ChangePassowrd, UpdateProfile, RefreshAccessToken, UploadeUserImage };
