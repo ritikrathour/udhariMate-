@@ -4,16 +4,16 @@ import { Link } from "react-router-dom";
 import LazyImage from "../utils/LazyImage";
 
 const Borrower = ({ borrower }) => { 
-    const { borrower: { userName, createdAt,profilePhoto }, _id,debt,advancedPayment} = borrower; 
-    const { user } = useSelector(state => state.user); 
+    const { borrower: { userName, createdAt, profilePhoto }, _id, debt, advancedPayment } = borrower;
+    const { user } = useSelector(state => state.user);
     let rupee_color = (debt === 0) ? "text-green-500" : advancedPayment ? "text-green-500" : "text-red-500";
     return (
-        <> 
+        <>
             <Link to={`/transacation-area/${user?.role === "customer" ? user?._id : _id}`}>
                 <div className="flex justify-between cursor-pointer hover:bg-gray-100 transition-all p-1 rounded-md">
                     <div className="flex gap-2">
-                        <div className="rounded-full overflow-hidden w-[40px] h-[40px]"> 
-                            <LazyImage src={ profilePhoto || "../images/user.png"} alt="borrowerImage" />
+                        <div className="rounded-full overflow-hidden w-[40px] h-[40px]">
+                            <LazyImage src={profilePhoto || "../images/user.png"} alt="borrowerImage" />
                         </div>
                         <div className="">
                             <h3 className="capitalize font-normal text-[14px]">{userName}</h3>

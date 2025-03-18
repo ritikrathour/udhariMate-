@@ -43,7 +43,8 @@ const SignUp = () => {
             toast.success("User Sign Up Successfully!");
             setLoading(false);
             setTimeout(() => {
-                Navigate("/signIn")
+                Navigate("/")
+                window.location.reload()
             }, 500);
         } catch (error) {
             setLoading(false)

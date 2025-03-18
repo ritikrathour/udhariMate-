@@ -1,14 +1,15 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import NavBar from "./layout/NavBar";
-import { useDispatch } from "react-redux";
-import { lazy, Suspense, useEffect } from "react";
+import { useDispatch} from "react-redux";
+import { lazy, Suspense, useEffect, useState } from "react";
 import Footer from "./layout/Footer";
 import { GetUser } from "./ReduxStore/UserSlice";
 import Loader from "./components/Loader";
 import BorrowerProfile from "./Pages/BorrowerProfile";
 import BreadCrumbs from "./components/Breadcrumbs"
 import ScrollToTop from "./components/ScrollTop";
-import PageNotFound from "./Pages/PageNotFound"; 
+import PageNotFound from "./Pages/PageNotFound";
+import MobilNavigationTab from "./layout/MobilNavigationTab";
 const Profile = lazy(() => import("./Pages/Profile"));
 const ForgetPassword = lazy(() => import("./Pages/ForgetPassword"));
 const TransactionArea = lazy(() => import("./Pages/TransactionArea"));
@@ -18,11 +19,12 @@ const Ladger = lazy(() => import("./Pages/Ladger"))
 const SignIn = lazy(() => import("./Pages/SignIn"))
 const SignUp = lazy(() => import("./Pages/SignUp"));
 const App = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
   useEffect(() => {
     dispatch(GetUser());
   }, []);
-  const { pathname } = useLocation(); 
+  const { pathname } = useLocation();
+ 
   return (
     <>
       {/* header  */}
@@ -33,6 +35,7 @@ const App = () => {
         <main className="px-2 mt-[68px] md:px-20 overflow-hidden">
           {pathname !== "/" && <BreadCrumbs />}
           <ScrollToTop />
+          <MobilNavigationTab/> 
           <Routes>
             <Route element={<Home />} path="/" />
             {/* ProtectedRoute*/}
@@ -46,7 +49,7 @@ const App = () => {
             <Route element={<ForgetPassword />} path="/forget-password" />
             <Route element={<SignUp />} path="/signup" />
             <Route element={<SignIn />} path="/signin" /> */
-            <Route element={<PageNotFound/> } path="*" />
+            <Route element={<PageNotFound />} path="*" />
           </Routes>
         </main>
       </Suspense >

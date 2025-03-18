@@ -20,11 +20,9 @@ const Ladger = () => {
     //get borrowers   
     const getBorrowers = async () => {         
         try {
-            const { data: { data } } = await AxiosInstance.get(`/borrowers?page=${page}`, { cancelToken: token.cancel() })
+            const { data: { data } } = await AxiosInstance.get(`/borrowers?page=${page}`, { cancelToken: token.cancel() }) 
             setTotalPages(data?.totalPages);
-            setBorrowers(prev => [...prev, ...data?.borrowers]);
-            console.log(data);
-            
+            setBorrowers(prev => [...prev, ...data?.borrowers]); 
             setborrowersloading(false)
             setMoreBorrowerLoading(false)
         } catch (error) {

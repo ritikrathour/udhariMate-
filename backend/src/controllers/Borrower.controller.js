@@ -59,7 +59,8 @@ const GetBorrowers = AsyncHandler(async (req, res) => {
         borrowers, count: borrowers.length, totalBorrowers, currentPage,
         totalPages
     }, "Get Users Successfully!"))
-})
+});
+
 const GetBorrowerById = AsyncHandler(async (req, res) => {
     const { id } = req.params;
     if (!id) {

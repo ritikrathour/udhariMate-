@@ -12,7 +12,7 @@ const accessTokenOptions = {
     httpOnly: true,
     sameSite: 'none',
     secure:true,
-    expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)
+    expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
 }
 
 const refreshTokenOptions = {
@@ -56,11 +56,21 @@ const SignUp = AsyncHandler(async (req, res) => {
         if (!shopkeeper) {
             throw new ApiError(400, "ShopKeeper could not Sign up!")
         }
+        const accessToken = jwt.sign({ role: shopkeeper?.role, _id: shopkeeper._id }, process.env.JWT_SECRET, {
+            expiresIn: "2d"
+        });
+        const refreshToken = jwt.sign({ role: shopkeeper?.role, _id: shopkeeper._id }, process.env.JWT_SECRET, {
+            expiresIn: "7d"
+        });
+        if (!accessToken) {
+            throw new ApiError(401, "Something is wrong for generating jwtToken!")
+        }
+        shopkeeper.refreshToken = refreshToken;
         await shopkeeper.save();
         shop.shopkeeper = shopkeeper._id;
         await shop.save();
         const savedShopKeeper = await Auth.findById(shopkeeper._id).select("-password");
-        res.status(201).json(new ApiResponse(201, savedShopKeeper, "ShopKeeper sign up successfully!"))
+        res.status(201).cookie("accessToken", accessToken, accessTokenOptions).cookie("refreshToken", refreshToken, refreshTokenOptions).json(new ApiResponse(201, savedShopKeeper, "ShopKeeper sign up successfully!"))
     } else if (role === "customer") {
         if (!mongoose.Types.ObjectId.isValid(shopId)) {
             throw new ApiError(400, "Shop Id is required for Customers!")
@@ -79,6 +89,16 @@ const SignUp = AsyncHandler(async (req, res) => {
         if (!customer) {
             throw new ApiError(400, "User could not Sign up!")
         };
+        const accessToken = jwt.sign({ role: customer?.role, _id: customer._id }, process.env.JWT_SECRET, {
+            expiresIn: "2d"
+        });
+        const refreshToken = jwt.sign({ role: customer?.role, _id: customer._id }, process.env.JWT_SECRET, {
+            expiresIn: "7d"
+        });
+        if (!accessToken) {
+            throw new ApiError(401, "Something is wrong for generating jwtToken!")
+        }
+        customer.refreshToken = refreshToken;
         shop.customers.push(customer._id)
         await shop.save();
         await Borrower.create({
@@ -86,8 +106,8 @@ const SignUp = AsyncHandler(async (req, res) => {
             shopKeeper: shop.shopkeeper,
             shopId
         })
-        const savedCustomer = await Auth.findById(customer._id).select("-password");
-        res.status(201).json(new ApiResponse(201, savedCustomer, "User sign up successfully!"))
+        const savedCustomer = await Auth.findById(customer._id).select("-password"); 
+        res.status(201).cookie("accessToken", accessToken, accessTokenOptions).cookie("refreshToken", refreshToken, refreshTokenOptions).json(new ApiResponse(201, savedCustomer, "User sign up successfully!"))
     } else {
         throw new ApiError(400, "Invalid role specified!")
     }
@@ -107,7 +127,7 @@ const SignIn = AsyncHandler(async (req, res) => {
         throw new ApiError(401, "Invalid password!")
     }
     const accessToken = jwt.sign({ role: existUser?.role, _id: existUser._id }, process.env.JWT_SECRET, {
-        expiresIn: "5d"
+        expiresIn: "2d"
     });
     const refreshToken = jwt.sign({ role: existUser?.role, _id: existUser._id }, process.env.JWT_SECRET, {
         expiresIn: "7d"
@@ -203,7 +223,7 @@ const RefreshAccessToken = AsyncHandler(async (req, res) => {
     if (!incommingRefeshToken) {
         throw new ApiError(401, "Unauthorized Request!");
     }
-    const decodedRefreshToken = jwt.verify(incommingRefeshToken, process.env.JWT_SECRET)//process.env.REFRESH_TOKEN_SECRET
+    const decodedRefreshToken = jwt.verify(incommingRefeshToken, process.env.JWT_SECRET) //process.env.REFRESH_TOKEN_SECRET
     if (!decodedRefreshToken) {
         throw new ApiError(400, "User Not Veryfied!")
     }
@@ -212,9 +232,9 @@ const RefreshAccessToken = AsyncHandler(async (req, res) => {
         throw new ApiError(401, "Invalid refreshToken");
     }
     const accessToken = jwt.sign({ role: user.role, _id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "5d"
+        expiresIn: "2d"
     });
-    const refreshToken = jwt.sign({ role: user.role, _id: user._id }, process.env.JWT_SECRET, {
+    const refreshToken = jwt.sign({ role: user.role, _id: user._id }, process.env.JWT_SECRET, { //process.env.REFRESH_TOKEN_SECRET
         expiresIn: "7d"
     });
     if (!accessToken) {

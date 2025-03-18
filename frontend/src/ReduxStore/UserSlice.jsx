@@ -8,9 +8,9 @@ const initialState = {
 }
 const reFreshAccessToken = async () => {
     try {
-      let res = await AxiosInstance.post("/user/refresh-access-token", {}); 
+      let res = await AxiosInstance.post("/user/refresh-access-token", {});   
       return res?.data?.data?.accessToken; 
-    } catch (error) {
+    } catch (error) { 
         console.log(error);
     }
 }
@@ -18,9 +18,7 @@ export const GetUser = createAsyncThunk("auth/getUser", async (_, { rejectWithVa
     try {
         const response = await AxiosInstance.get("/user"); 
         return response?.data?.data;
-    } catch (error) {
-        console.log(error?.response?.data?.message);
-        console.log(error);   
+    } catch (error) {    
         if (error.response.status === 401) {
              reFreshAccessToken();
         }

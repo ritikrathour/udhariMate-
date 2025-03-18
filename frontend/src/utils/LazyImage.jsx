@@ -29,7 +29,7 @@ const LazyImage = ({ src, alt, style,accept }) => {
          onLoad={handleLoad}
         src={ src } 
          alt={alt}
-        className={`${style} w-full h-full transition-all ${!isLoaded ? "blur-2xl": "" }`} 
+        className={`${style} w-full block object-cover h-full transition-all ${!isLoaded ? "blur-2xl": "" }`} 
         accept={accept}
         /> 
         </>
