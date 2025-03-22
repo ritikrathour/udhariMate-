@@ -32,7 +32,7 @@ const SignOutPopUp = () => {
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()} className="md:w-[50%] md:h-[40%] w-full h-[220px] rounded-xl bg-white drop-shadow-md relative flex justify-between p-5 flex-col gap-4">
+            <div onClick={(e) => e.stopPropagation()} className="md:w-[50%] md:h-[40%] w-full h-[220px] rounded-xl bg-white drop-shadow-md relative flex justify-between p-5 flex-col gap-4 z-50">
                 <div className="absolute top-6 left-4 w-[35px] h-[35px] rounded-full cursor-pointer bg-[#69d2ff3d] text-center"><i className="fas fa-warning leading-[35px] text-[#469bbf]"></i></div>
                 <div className="mt-10">
                     <h2 className="font-medium text-lg text-red-950">Sign Out From UdhariMate.</h2>
