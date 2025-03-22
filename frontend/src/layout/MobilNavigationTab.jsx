@@ -1,12 +1,17 @@
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import Loader from "../components/Loader";
+import MobileNavSkeleton from "../components/MobileNavSkeleton";
 
 const MobilNavigationTab = () => {
-    const { user } = useSelector(state => state.user); 
-    const location = useLocation();
+    const { user,loading } = useSelector(state => state.user); 
+    const location = useLocation(); 
+    if(loading){
+        return <MobileNavSkeleton/>
+    }
     return (
         <>
-            <ul className="w-full h-[60px] backdrop-blur-lg border-t border-gray-300 border-2 fixed z-50 px-2.5 sm:hidden bottom-0 left-0 flex justify-around gap-5 items-center ">
+            <ul className="w-full h-[60px] backdrop-blur-lg border-t border-gray-300 border-2 fixed z-40 px-2.5 sm:hidden bottom-0 left-0 flex justify-around gap-5 items-center ">
                 <Link className={` ${location.pathname === "/" ? "bg-[white] border-b-4 border-black" : ""} w-1/3  rounded-md`} to="/">
                     <li className="text-center backdrop-blur-xl backdrop-brightness-90">
                         <i className="fas fa-home w-[30px] h-[30px] rounded-full shadow-xl shadow-zinc-400  text-black text-center leading-[30px] text-[16px]"></i>
