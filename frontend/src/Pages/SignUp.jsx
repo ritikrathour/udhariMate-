@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Input";
 import Loader from "../components/Loader";
 import AxiosInstance from "../utils/AxiosInstance";
+import EmailValidate from "../helper/EmailValidate";
 const SignUp = () => {
     const Navigate = useNavigate()
     const [loading, setLoading] = useState(false);
@@ -29,6 +30,16 @@ const SignUp = () => {
     // signup authentication     
     const authentication = useCallback(async (formData) => {
         try {
+            const validEmail = EmailValidate(formData.email); 
+            if (!validEmail) {
+                toast.error("Invalid Email!", {
+                    iconTheme: {
+                        primary: "#f44336",
+                        secondary: "#000"
+                    }
+                });
+                return
+            }
             if (formRef.current.password?.value && formRef.current.password?.value.length < 6) {
                 toast.error("Password Length Should Be More than 6",{
                     iconTheme:{
