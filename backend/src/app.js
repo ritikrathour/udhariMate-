@@ -21,8 +21,7 @@ origin: (origin, callback) => {
         origin: allowedOrigins,
         methods: ["PUT", "GET", "POST", "PATCH","DELETE"],
         credentials: true,
-    }))
-// "http://localhost:5173"
+    })) 
 app.use(express.json({ limit: "16kb" }))
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())

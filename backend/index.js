@@ -8,7 +8,7 @@ DBConnection().then(() => {
 }).catch((error) => {
     console.log("server connection faild...", error);
 }) 
-const shutDown = () => {
+const shutDown = (server) => {
     console.log("shutting down server....");
     server.close(()=>{
         console.log("closed Server...");

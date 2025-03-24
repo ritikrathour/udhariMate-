@@ -26,14 +26,22 @@ const CreateDebt = AsyncHandler(async (req, res) => {
     }
     getBorrower.transactions.push(debtTransaction._id)
 
-    if (getBorrower.advancedPayment > 0) { 
-        getBorrower.advancedPayment = getBorrower.advancedPayment - amount
-        if (getBorrower.advancedPayment < 0) {
-            getBorrower.debt = Math.abs(getBorrower.advancedPayment);
-            getBorrower.advancedPayment = 0
-        }
+    // if (getBorrower.advancedPayment > 0) { 
+    //     getBorrower.advancedPayment = getBorrower.advancedPayment - amount;
+    //     if (getBorrower.advancedPayment < 0) {
+    //         getBorrower.debt = Math.abs(getBorrower.advancedPayment);
+    //         getBorrower.advancedPayment = 0
+    //     }
+    // } else {
+    //     getBorrower.debt = Number(getBorrower.debt) + Number(amount);
+    // }
+
+    if (getBorrower.advancedPayment >= amount) {
+        getBorrower.advancedPayment -= amount; // Use advance payment first
     } else {
-        getBorrower.debt = Number(getBorrower.debt) + Number(amount);
+        const remainingDebt = amount - getBorrower.advancedPayment;
+        getBorrower.advancedPayment = 0;
+        getBorrower.debt += remainingDebt; // Create new debt
     }
     const updateBorrower = await getBorrower.save();
     if (!updateBorrower) {
@@ -57,24 +65,21 @@ const CreatePayment = AsyncHandler(async (req, res) => {
     if (!paymentTransaction) {
         throw new ApiError(400, "Payment Transactions not created!")
     }
+    
     const getBorrower = await Borrower.findById(borrower); 
     if (!getBorrower) {
         throw new ApiError(404, "Borrower Not Fund!")
     }
-    let updateFields = {
-        $inc: { advancedPayment: getBorrower.advancedPayment },
-        $inc: { debt: getBorrower.debt },
-        $push: { transactions: paymentTransaction._id }
-    };
-    let remainingDebt = getBorrower.debt - amount; 
-    if (remainingDebt <= 0) { 
-        updateFields.$set = { debt: 0 }
-        updateFields.$inc = { advancedPayment: Math.abs(remainingDebt) }
+    
+    getBorrower.transactions.push(paymentTransaction._id);
+    
+    if (amount >= getBorrower.debt) {
+        getBorrower.advancedPayment += (amount - getBorrower.debt);
+        getBorrower.debt = 0;
     } else {
-        updateFields.$inc = { debt: -remainingDebt }
-    }
-
-    const updateBorrower = await Borrower.findByIdAndUpdate(borrower, updateFields, { new: true })
+        getBorrower.debt -= amount;
+    } 
+    const updateBorrower = await getBorrower.save();
     if (!updateBorrower) {
         throw new ApiError(400, "Borrower could not Updated!")
     }

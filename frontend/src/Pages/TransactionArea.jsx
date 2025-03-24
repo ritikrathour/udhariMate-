@@ -56,7 +56,7 @@ const TransactionArea = () => {
     }
     return (
         <>
-            <div className="m-auto bg-gray-100 w-full h-full top-0 left-0 relative md:block rounded-md border-2 ">
+            <div className="m-auto sm:bg-gray-100 w-full h-full relative md:block rounded-md border-2">
                 {
                     showBill && <ScrollToTop />
 
@@ -82,7 +82,8 @@ const TransactionArea = () => {
                         <h2 className="font-semibold  text-green-500 text-[16px]">₹{borrower?.advancedPayment || 0}</h2>
                     </div>
                 </nav>
-                <div ref={scrollRef} className={`md:p-4 ${borrower?.transactions && borrower?.transactions.length < !0 ? "flex justify-center items-center" : ""}  mt-2 px-2 w-full overflow-y-auto md:h-[520px] sm:h-[420px] h-[400px]`}>
+                <div ref={scrollRef} className={`md:p-4 ${borrower?.transactions && borrower?.transactions.length < !0 ? 
+                    "flex justify-center items-center" : ""}  mt-2 px-2 w-full overflow-y-auto md:h-[520px] h-[500px]`}>
                     {
                         borrower?.transactions && borrower?.transactions.length > 0 ? (
                             <ul className="flex flex-col gap-4 flex-wrap sm:justify-between justify-center overflow-hidden">
@@ -95,7 +96,7 @@ const TransactionArea = () => {
                         ) : <NoContent img="../images/shophere.png" alt="no transations" text="You Have No Transation Yet!" />
                     }
                 </div>
-                <footer className="bg-white md:py-2 sm:py-2 p-2 flex justify-between flex-col-reverse sm:flex-row gap-4 items-center z-40 w-full">
+                <footer className="bg-white rounded-tl-lg rounded-tr-lg md:py-2 sm:py-2 p-2 flex justify-between flex-col-reverse sm:flex-row gap-4 items-center z-40 w-full">
                     <div>
                         <div className="flex flex-col items-center">
                             <p className="text-[14px] text-nowrap">Balence Due</p>
