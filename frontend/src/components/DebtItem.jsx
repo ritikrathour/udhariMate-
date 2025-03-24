@@ -2,7 +2,9 @@ import { memo, useState } from "react";
 
 const DebtItem = ({ style, items }) => {
     const [showFullText, setShowFullText] = useState(false);
-    const { amount, description, date, type,createdAt } = items;  
+    const { amount, description, date, type,createdAt } = items; 
+    console.log(createdAt);
+     
     let ifLengthMore = description?.length > 15 ? showFullText ? description : description.slice(0, 20) + "..." :description; 
     return (
         <>
