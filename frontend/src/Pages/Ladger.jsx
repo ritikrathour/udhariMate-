@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import Loader from "../components/Loader";
-import NoContent from "../components/NoContent"; 
+import NoContent from "../components/NoContent";
 import AxiosInstance from "../utils/AxiosInstance";
 const Ladger = () => {
     const { user } = useSelector(state => state.user);
@@ -15,35 +15,38 @@ const Ladger = () => {
     const location = useLocation();
     const [totalPages, setTotalPages] = useState(0)
     const [page, setPage] = useState(1);
-    const [moreBorrowerLoading, setMoreBorrowerLoading] = useState(false); 
+    const [moreBorrowerLoading, setMoreBorrowerLoading] = useState(false);
     const token = axios.CancelToken.source();
-    //get borrowers   
-    const getBorrowers = async () => {         
+    //get borrowers       
+    const getBorrowers = async () => {
         try {
-            const { data: { data } } = await AxiosInstance.get(`/borrowers?page=${page}`, { cancelToken: token.cancel() }) 
+            const { data: { data } } = await AxiosInstance.get(`/borrowers?page=${page}`, { cancelToken: token.cancel() })
             setTotalPages(data?.totalPages);
-            setBorrowers(prev => [...prev, ...data?.borrowers]);  
+            setBorrowers(prev => [...prev, ...data?.borrowers]);
             setborrowersloading(false)
-            setMoreBorrowerLoading(false)
-        } catch (error) {
-            console.log(error);
+            if (page > 1) { 
+                setMoreBorrowerLoading(false)
+            }
+        } catch (error) { 
             setborrowersloading(false);
-            setMoreBorrowerLoading(false); 
+            if (page > 1) {
+                setMoreBorrowerLoading(false)
+            }
         }
     }
     // handleLoadMorePage 
-    const handleLoadMorePage = () => { 
+    const handleLoadMorePage = () => {
         setPage(prev => prev + 1);
         setMoreBorrowerLoading(true)
-    } 
-    const handleShow = () => { 
+    }
+    const handleShow = () => {
         setShow(prev => !prev);
-    } 
-    useEffect(() => { 
+    }
+    useEffect(() => {
         setShow(false)
     }, [location])
-    
-    useEffect(() => { 
+
+    useEffect(() => {
         if (user && user?.role === "shopkeeper") {
             getBorrowers();
         }
@@ -52,7 +55,7 @@ const Ladger = () => {
     return (
         <>
             <section className="flex flex-col md:flex-row w-full sm:w-[90%] md:w-[80%] m-auto mb-4 gap-4 relative rounded-md">
-                <div className=" w-full py-2 px-2 "> 
+                <div className=" w-full py-2 px-2 ">
                     <div className="flex justify-between mb-4 relative z-40">
                         <h3 className="text-[16px] font-normal border-b-2 border-black uppercase text-black" >Customers</h3>
                         <button ref={filterPopupRef} onClick={handleShow} type="button" className=" border text-[16px] border-gray-300 px-4 rounded-full font-medium bg-[#69d2ff3d]">
@@ -64,7 +67,7 @@ const Ladger = () => {
                             </div>
                             <div className="flex flex-col justify-start items-start gap-1 p-2 w-full mt-1">
                                 <div className="flex gap-2 items-center">
-                                    <input className="cursor-pointer" type="checkbox" name="name" id="name"   />
+                                    <input className="cursor-pointer" type="checkbox" name="name" id="name" />
                                     <label className="cursor-pointer text-[13px]" htmlFor="name">Name</label>
                                 </div>
                                 <div className="flex gap-2 items-center">
@@ -72,7 +75,7 @@ const Ladger = () => {
                                     <label className="cursor-pointer text-[13px]" htmlFor="amount">Amount</label>
                                 </div>
                                 <div className="flex gap-2 items-center">
-                                    <input className="cursor-pointer" type="checkbox" name="latest" id="latest"  />
+                                    <input className="cursor-pointer" type="checkbox" name="latest" id="latest" />
                                     <label className="cursor-pointer text-[13px]" htmlFor="latest">Latest</label>
                                 </div>
                                 <button onClick={() => setShow(false)} className="rounded-md py-1 text-white bg-[#469bbf] w-full mt-1">Save</button>
