@@ -10,11 +10,13 @@ import ScrollToTop from "../components/ScrollTop";
 import AxiosInstance from "../utils/AxiosInstance";
 import LazyImage from "../utils/LazyImage";
 import Loader from "../components/Loader";
+import socket from "../helper/socket";
 const TransactionArea = () => {
     const [showBill, setShowBill] = useState(false);
     const [isPayment, setIsPayment] = useState(false);
     const [borrower, setBorrower] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [transactions,setTransactions] = useState([])
     const scrollRef = useRef();
     const { id } = useParams();
     const { user } = useSelector(state => state.user);
@@ -34,6 +36,7 @@ const TransactionArea = () => {
         try {
             const { data } = await AxiosInstance.get(`/borrower/${id}`);
             setBorrower(data?.data);
+            setTransactions(data?.data?.transactions);
             setLoading(false);
         } catch (error) {
             console.log(error?.response?.data?.message);
@@ -45,7 +48,13 @@ const TransactionArea = () => {
             GetBorrowerByID();
         }
     }, [id]);
-
+    useEffect(()=>{
+        socket.on("transaction_update", (newTransaction) => {
+            setTransactions((prev) => [newTransaction, ...prev]);
+          });
+      
+          return () => socket.off("transaction_update");
+    },[])
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -63,7 +72,7 @@ const TransactionArea = () => {
                 }
                 {
                     user && user?.role === "shopkeeper" &&
-                    <div className={`${showBill ? "translate-y-0 pointer-events-auto opacity-100 transition-all md:h-[650px] h-[600px]" : " -translate-y-full pointer-events-none opacity-0 h-0 transition-all"} bg-gray-200 z-40 rounded-md px-2 absolute top-0 left-0 w-full`}>
+                    <div className={`${showBill ? "translate-y-0 pointer-events-auto opacity-100 transition-all md:h-[650px] h-full" : " -translate-y-full pointer-events-none opacity-0 h-0 transition-all"} bg-gray-200 z-40 rounded-md px-2 absolute top-0 left-0 w-full`}>
                         <Bill id={borrower?._id} isPayment={isPayment} setShowBill={setShowBill} />
                     </div>
                 }
@@ -82,13 +91,13 @@ const TransactionArea = () => {
                         <h2 className="font-semibold  text-green-500 text-[16px]">₹{borrower?.advancedPayment || 0}</h2>
                     </div>
                 </nav>
-                <div ref={scrollRef} className={`md:p-4 ${borrower?.transactions && borrower?.transactions.length < !0 ? 
+                <div ref={scrollRef} className={`md:p-4 ${transactions?.length < !0 ? 
                     "flex justify-center items-center" : ""}  mt-2 px-2 w-full overflow-y-auto md:h-[520px] h-[500px]`}>
                     {
-                        borrower?.transactions && borrower?.transactions.length > 0 ? (
+                       transactions?.length > 0 ? (
                             <ul className="flex flex-col gap-4 flex-wrap sm:justify-between justify-center overflow-hidden">
                                 {
-                                    borrower?.transactions?.map((item) => {
+                                    transactions?.map((item) => {
                                         return <DebtItem key={item?._id} items={item} style={`${item?.type === "DEBT" ? "text-red-400" : "text-green-400"}`} />
                                     })
                                 }
@@ -98,7 +107,7 @@ const TransactionArea = () => {
                 </div>
                 <footer className="bg-white rounded-tl-lg rounded-tr-lg md:py-2 sm:py-2 p-2 flex justify-between flex-col-reverse sm:flex-row gap-4 items-center z-40 w-full">
                     <div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex md:flex-col gap-2 md:gap-0 items-center">
                             <p className="text-[14px] text-nowrap">Balence Due</p>
                             <h2 className="font-semibold  text-red-500 text-[16px]">₹{borrower?.debt || 0}</h2>
                         </div>
