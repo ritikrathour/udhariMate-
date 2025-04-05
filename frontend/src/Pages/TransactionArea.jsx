@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import Bill from "../components/Bill";
-import { useEffect, useState } from "react"; 
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import PatmentAndCreditButtons from "../components/Payment&CreditButtons";
 import DebtItem from "../components/DebtItem";
@@ -11,15 +11,16 @@ import AxiosInstance from "../utils/AxiosInstance";
 import LazyImage from "../utils/LazyImage";
 import Loader from "../components/Loader";
 import socket from "../helper/socket";
+import toast from "react-hot-toast";
 const TransactionArea = () => {
     const [showBill, setShowBill] = useState(false);
     const [isPayment, setIsPayment] = useState(false);
     const [borrower, setBorrower] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [transactions,setTransactions] = useState([])
+    const [loading, setLoading] = useState(false); 
     const scrollRef = useRef();
     const { id } = useParams();
     const { user } = useSelector(state => state.user);
+
     // handelClickPayment    
     const handelClickPayment = () => {
         setShowBill(true);
@@ -36,32 +37,41 @@ const TransactionArea = () => {
         try {
             const { data } = await AxiosInstance.get(`/borrower/${id}`);
             setBorrower(data?.data);
-            setTransactions(data?.data?.transactions);
             setLoading(false);
         } catch (error) {
             console.log(error?.response?.data?.message);
             setLoading(false);
         }
-    };
+    }; 
     useEffect(() => {
         if (user?._id) {
             GetBorrowerByID();
+            socket.on("newTransaction", (newTransaction) => {
+                setBorrower(prev => ({ ...prev, transactions: [...prev?.transactions, newTransaction] }));
+                toast.success("New Transaction!");
+            });
+            socket.on("updateDebtAndAdvance",(updatedData)=>{ 
+                setBorrower((prev)=>({
+                    ...prev,
+                    debt:updatedData?.debt,
+                    advancedPayment:updatedData?.advancedPayment
+                }))
+            })
+            return () => {
+                socket.off("newTransaction");
+                socket.off("updateDebtAndAdvance");
+            }
         }
     }, [id]);
-    useEffect(()=>{
-        socket.on("transaction_update", (newTransaction) => {
-            setTransactions((prev) => [newTransaction, ...prev]);
-          });
-      
-          return () => socket.off("transaction_update");
-    },[])
+
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [borrower?.transactions]);
+
     if (loading) {
-        return  <div className="w-full h-screen flex justify-center items-center"> <Loader style="border-2 border-black"/></div>
+        return <div className="w-full h-screen flex justify-center items-center"> <Loader style="border-2 border-black" /></div>
     }
     return (
         <>
@@ -69,7 +79,7 @@ const TransactionArea = () => {
                 {
                     showBill && <ScrollToTop />
 
-                }
+                } 
                 {
                     user && user?.role === "shopkeeper" &&
                     <div className={`${showBill ? "translate-y-0 pointer-events-auto opacity-100 transition-all md:h-[650px] h-full" : " -translate-y-full pointer-events-none opacity-0 h-0 transition-all"} bg-gray-200 z-40 rounded-md px-2 absolute top-0 left-0 w-full`}>
@@ -88,17 +98,17 @@ const TransactionArea = () => {
                     </div>
                     <div className="flex flex-col items-center">
                         <p className="text-[14px] font-medium">Advance Credit</p>
-                        <h2 className="font-semibold  text-green-500 text-[16px]">₹{borrower?.advancedPayment || 0}</h2>
+                        <h2 className="font-semibold  text-green-600 text-[16px]">₹{borrower?.advancedPayment || 0}</h2>
                     </div>
                 </nav>
-                <div ref={scrollRef} className={`md:p-4 ${transactions?.length < !0 ? 
+                <div ref={scrollRef} className={`md:p-4 ${borrower?.transactions?.length < !0 ?
                     "flex justify-center items-center" : ""}  mt-2 px-2 w-full overflow-y-auto md:h-[520px] h-[500px]`}>
                     {
-                       transactions?.length > 0 ? (
+                        borrower?.transactions?.length > 0 ? (
                             <ul className="flex flex-col gap-4 flex-wrap sm:justify-between justify-center overflow-hidden">
                                 {
-                                    transactions?.map((item) => {
-                                        return <DebtItem key={item?._id} items={item} style={`${item?.type === "DEBT" ? "text-red-400" : "text-green-400"}`} />
+                                    borrower?.transactions?.map((item) => {
+                                        return <DebtItem key={item?._id} items={item} style={`${item?.type === "DEBT" ? "text-red-500" : "text-green-600"}`} />
                                     })
                                 }
                             </ul>

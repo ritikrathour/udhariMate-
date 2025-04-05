@@ -1,8 +1,7 @@
 import { memo, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast"
-import AxiosInstance from "../utils/AxiosInstance";
-import socket from "../helper/socket";
+import AxiosInstance from "../utils/AxiosInstance"; 
 const Bill = ({ isPayment, setShowBill, id }) => {
     const [amount, setAmount] = useState("");
     const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -21,13 +20,11 @@ const Bill = ({ isPayment, setShowBill, id }) => {
         setLoading(true)
         try {
             const payload = { amount, description, borrower: id, date }
-            const { data } = await AxiosInstance.post("/create-debt", payload);
-            socket.emit("new_transaction", {...payload,type:"DEBT",shopkeeper:user?._id} ); // Emit transaction event
+            await AxiosInstance.post("/create-debt", payload); 
             setAmount("")
             setDate("")
             setdescription("")
-            setLoading(false);
-            toast.success(data?.message)
+            setLoading(false); 
             setShowBill(false);
         } catch (error) {
             console.log(error);
@@ -39,13 +36,11 @@ const Bill = ({ isPayment, setShowBill, id }) => {
         setLoading(true)
         try {
             const payload = { amount, borrower: id, description, date };
-            const { data } = await AxiosInstance.post(`/create-payment`, payload);
-            socket.emit("new_transaction",  {...payload,type:"PAYMENT",shopkeeper:user?._id}); // Emit transaction event
+            await AxiosInstance.post(`/create-payment`, payload); 
             setAmount("")
             setDate("")
             setdescription("");
-            setLoading(false);
-            toast.success(data?.message)
+            setLoading(false); 
             setShowBill(false);
         } catch (error) {
             console.log(error);
