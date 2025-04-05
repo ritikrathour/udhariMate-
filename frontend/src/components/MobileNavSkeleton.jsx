@@ -2,7 +2,7 @@ import React from 'react';
 
 const MobileNavSkeleton = () => {
   return (
-    <div className="fixed bottom-0 left-0 w-full backdrop-blur-2xl shadow-lg p-2 flex justify-around">
+    <div className="fixed md:hidden bottom-0 left-0 w-full backdrop-blur-2xl shadow-lg p-2 flex justify-around">
       {/* Skeleton Buttons */}
       {Array(3).fill(null).map((_, index) => (
         <div key={index} className="flex flex-col items-center">

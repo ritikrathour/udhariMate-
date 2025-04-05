@@ -1,13 +1,12 @@
-
 import { memo, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast"
-import AxiosInstance from "../utils/AxiosInstance";
+import AxiosInstance from "../utils/AxiosInstance"; 
 const Bill = ({ isPayment, setShowBill, id }) => {
     const [amount, setAmount] = useState("");
     const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
     const [description, setdescription] = useState("");
-    const { user } = useSelector(state => state.user);
+    const { user } = useSelector(state => state.user); 
     const [loading, setLoading] = useState(false);
     const createDebt = async () => {
         if (description.length === 0 || description === "") {
@@ -21,12 +20,11 @@ const Bill = ({ isPayment, setShowBill, id }) => {
         setLoading(true)
         try {
             const payload = { amount, description, borrower: id, date }
-            const { data } = await AxiosInstance.post("/create-debt", payload,)
+            await AxiosInstance.post("/create-debt", payload); 
             setAmount("")
             setDate("")
             setdescription("")
-            setLoading(false);
-            toast.success(data?.message)
+            setLoading(false); 
             setShowBill(false);
         } catch (error) {
             console.log(error);
@@ -38,12 +36,11 @@ const Bill = ({ isPayment, setShowBill, id }) => {
         setLoading(true)
         try {
             const payload = { amount, borrower: id, description, date };
-            const { data } = await AxiosInstance.post(`/create-payment`, payload)
+            await AxiosInstance.post(`/create-payment`, payload); 
             setAmount("")
             setDate("")
             setdescription("");
-            setLoading(false);
-            toast.success(data?.message)
+            setLoading(false); 
             setShowBill(false);
         } catch (error) {
             console.log(error);

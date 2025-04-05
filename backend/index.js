@@ -1,23 +1,25 @@
-const app = require("./src/app.js");
-const DBConnection = require("./src/database/index.js"); 
+const app = require("./src/app.js")
+const DBConnection = require("./src/database/index.js")
 const Port = process.env.DBPort || 7000; 
-DBConnection().then(() => {
-    app.listen(Port, () => {
+const { createServer } = require("http");
+const { initializeSocket } = require("./src/utils/Socket.js");
+const { default: mongoose } = require("mongoose");
+const server = createServer(app);
+initializeSocket(server)
+DBConnection().then(() => { 
+    server.listen(Port, () => {
         console.log(`server is running at http://localhost:${Port}`);
     })
 }).catch((error) => {
     console.log("server connection faild...", error);
 }) 
-const shutDown = (server) => {
+const shutDown = () => {
     console.log("shutting down server....");
-    server.close(()=>{
+    server.close(() => {
         console.log("closed Server...");
-        mongoose.connection.close(false,()=>{
-            console.log("Closed DB connection");
-            process.exit(0)
-        })
+        mongoose.connection.close()
     })
 }
-process.on("SIGINT",shutDown)
-process.on("SIGTERM",shutDown)
+process.on("SIGINT", shutDown)
+process.on("SIGTERM", shutDown)
 
